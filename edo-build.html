@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>EDÖ Auto Lab | Start a Build</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="Configure your car build with EDÖ Auto Lab. Choose make, model and build type for example paths and custom planning."
+  />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>html { scroll-behavior: smooth; }</style>
+</head>
+<body class="bg-slate-950 text-slate-100">
+
+  <header class="sticky top-0 z-30 backdrop-blur bg-slate-950/90 border-b border-slate-800">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="edo-home.html" class="flex items-center gap-2">
+        <!-- Simple logo -->
+        <div class="h-9 w-9 rounded-full border border-sky-400 bg-slate-900 flex items-center justify-center">
+          <span class="text-[0.65rem] font-semibold tracking-[0.18em] text-sky-300">EDÖ</span>
+        </div>
+        <div class="leading-tight">
+          <div class="font-semibold tracking-[0.16em] text-xs uppercase text-slate-100">EDÖ AUTO LAB</div>
+          <div class="text-[0.65rem] text-slate-400">Custom Build Blueprints</div>
+        </div>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-6 text-sm">
+        <a href="edo-home.html" class="hover:text-sky-400 transition">Home</a>
+        <a href="edo-build.html" class="hover:text-sky-400 transition">Build</a>
+        <a href="edo-about.html" class="hover:text-sky-400 transition">About</a>
+      </nav>
+
+      <a href="edo-build.html"
+         class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium bg-sky-500 hover:bg-sky-400 text-slate-950 transition">
+        Start a Build
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <section class="max-w-6xl mx-auto px-4 pt-12 pb-14">
+      <h1 class="text-2xl sm:text-3xl font-semibold mb-2">Start Your Build</h1>
+      <p class="text-sm text-slate-300 mb-5 max-w-xl">
+        Select your platform and build type. If we have a mapped setup for that combo, you will see an example build sheet
+        and part ideas instantly. If not, you still get a clean summary you can send for a fully custom plan.
+      </p>
+
+      <!-- FORM -->
+      <div class="bg-slate-900/80 border border-slate-700 rounded-2xl p-5 sm:p-6 mb-8">
+        <form id="buildForm" class="space-y-4" onsubmit="handleBuild(event)">
+          <div class="grid sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Make</label>
+              <input list="makeList" id="makeInput" placeholder="Nissan, Porsche, Audi, Toyota..."
+                     class="w-full bg-slate-950/60 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-sky-400" />
+              <datalist id="makeList"></datalist>
+            </div>
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Model</label>
+              <input list="modelList" id="modelInput" placeholder="GT-R R35, 911 Turbo, R8 V10, WRX..."
+                     class="w-full bg-slate-950/60 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-sky-400" />
+              <datalist id="modelList"></datalist>
+            </div>
+          </div>
+
+          <div class="grid sm:grid-cols-4 gap-3">
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Year</label>
+              <input id="yearInput" type="text" placeholder="2018"
+                     class="w-full bg-slate-950/60 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-sky-400" />
+            </div>
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Trim</label>
+              <input id="trimInput" type="text" placeholder="Nismo, GT3, ZL1, STI..."
+                     class="w-full bg-slate-950/60 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-sky-400" />
+            </div>
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Drivetrain</label>
+              <input list="drivetrainList" id="drivetrainInput" placeholder="RWD, AWD, 4WD..."
+                     class="w-full bg-slate-950/60 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-sky-400" />
+              <datalist id="drivetrainList">
+                <option value="FWD"></option>
+                <option value="RWD"></option>
+                <option value="AWD"></option>
+                <option value="4WD"></option>
+              </datalist>
+            </div>
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Build Type</label>
+              <input list="buildTypeList" id="buildTypeInput" placeholder="Street, Drift, Drag..."
+                     class="w-full bg-slate-950/60 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-sky-400" />
+              <datalist id="buildTypeList">
+                <option value="Street"></option>
+                <option value="Track"></option>
+                <option value="Drift"></option>
+                <option value="Drag"></option>
+                <option value="Off-road"></option>
+                <option value="Rally"></option>
+                <option value="Show / SEMA"></option>
+              </datalist>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Anything Specific You Want?</label>
+            <textarea id="notesInput" rows="3"
+                      placeholder="Noise limits, budget cap, emissions rules, daily mileage, tyre preferences, track days..."
+                      class="w-full bg-slate-950/60 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-sky-400"></textarea>
+          </div>
+
+          <div class="flex flex-wrap gap-3 items-center">
+            <button type="submit"
+                    class="inline-flex justify-center items-center px-5 py-2.5 rounded-xl text-sm font-medium bg-sky-500 hover:bg-sky-400 text-slate-950 transition">
+              Show Example Build
+            </button>
+            <p class="text-[11px] text-slate-500">
+              Front-end only for now. When you are ready, a developer can connect this to email, Airtable or a backend.
+            </p>
+          </div>
+        </form>
+      </div>
+
+      <!-- RESULT -->
+      <div id="resultBox" class="hidden bg-slate-900/80 border border-slate-700 rounded-2xl p-5 sm:p-6">
+        <h2 id="resultTitle" class="text-lg font-semibold mb-1"></h2>
+        <p id="resultSubtitle" class="text-xs text-slate-400 mb-3"></p>
+        <p id="resultText" class="text-sm text-slate-300 mb-4"></p>
+
+        <div id="resultParts" class="grid md:grid-cols-2 gap-3 text-sm mb-4"></div>
+
+        <p class="text-[11px] text-slate-500">
+          Want this dialed exactly to your budget, fuel and roads? Email
+          <span class="text-sky-300">contact@edoautolab.com</span> (placeholder) or DM on socials with this combo and your budget
+          and we will build a full mod blueprint for you.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-slate-800 bg-slate-950">
+    <div class="max-w-6xl mx-auto px-4 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+      <div class="flex items-center gap-2">
+        <span class="font-semibold text-slate-200">EDÖ Auto Lab</span>
+        <span class="hidden sm:inline-block text-slate-600">•</span>
+        <span>Built by Ethan Vanderschaaff</span>
+      </div>
+      <div>Future: TikTok · Instagram · YouTube · Discord links live here.</div>
+    </div>
+  </footer>
+
+
+  <script>
+    // CAR DATA
+    const carData = {
+      "Nissan": [
+        "350Z",
+        "370Z",
+        "240SX (S13)",
+        "240SX (S14)",
+        "240SX (S15)",
+        "Skyline R32",
+        "Skyline R33",
+        "Skyline R34",
+        "GT-R R35"
+      ],
+      "Porsche": [
+        "911 Carrera S",
+        "911 Carrera GTS",
+        "911 Turbo",
+        "911 Turbo S",
+        "911 GT3",
+        "911 GT3 RS",
+        "Cayman",
+        "Cayman GT4"
+      ],
+      "Lamborghini": [
+        "Huracán LP610-4",
+        "Huracán Evo",
+        "Huracán Performante"
+      ],
+      "Audi": [
+        "A3",
+        "S3",
+        "RS3",
+        "S4",
+        "RS4",
+        "S5",
+        "RS5",
+        "R8 V8",
+        "R8 V10"
+      ],
+      "McLaren": [
+        "570S",
+        "600LT",
+        "720S"
+      ],
+      "Chevrolet": [
+        "Camaro SS",
+        "Camaro ZL1",
+        "Corvette C5",
+        "Corvette C6",
+        "Corvette C7 Grand Sport",
+        "Corvette C7 Z06",
+        "Corvette C7 ZR1",
+        "Corvette C8 Stingray",
+        "Corvette C8 Z06",
+        "Silverado 1500"
+      ],
+      "Toyota": [
+        "Supra MK4 (A80)",
+        "Supra MK5 (A90)",
+        "GT86",
+        "GR86",
+        "Corolla AE86",
+        "Chaser",
+        "Mark II",
+        "4Runner"
+      ],
+      "Dodge": [
+        "Challenger R/T",
+        "Challenger Scat Pack",
+        "Challenger Hellcat",
+        "Charger R/T",
+        "Charger Scat Pack",
+        "Charger Hellcat",
+        "Viper",
+        "Viper ACR"
+      ],
+      "Ferrari": [
+        "458 Italia",
+        "458 Speciale",
+        "488 GTB",
+        "488 Pista"
+      ],
+      "Mercedes-AMG": [
+        "AMG GT",
+        "AMG GTR",
+        "AMG GTC",
+        "C63 AMG",
+        "E63 AMG"
+      ],
+      "BMW": [
+        "335i (N54)",
+        "135i (N54)",
+        "M3 E36",
+        "M3 E46",
+        "M3 E92",
+        "M4 F82",
+        "3-Series (F30)",
+        "4-Series (F32)",
+        "M8 Competition"
+      ],
+      "Lexus": [
+        "LC500"
+      ],
+      "Honda": [
+        "Civic EG",
+        "Civic EK",
+        "Civic 8th Gen",
+        "Civic 10th Gen",
+        "S2000"
+      ],
+      "Acura": [
+        "Integra DC2",
+        "RSX Type-S"
+      ],
+      "Subaru": [
+        "WRX",
+        "WRX STI",
+        "BRZ"
+      ],
+      "Mazda": [
+        "RX-7 FC",
+        "RX-7 FD",
+        "Miata NA",
+        "Miata NB",
+        "Miata NC",
+        "Miata ND"
+      ],
+      "Volkswagen": [
+        "GTI MK6",
+        "GTI MK7",
+        "Golf R MK7",
+        "Golf R MK8"
+      ],
+      "Ford": [
+        "Mustang GT",
+        "Mustang GT350",
+        "Mustang GT500",
+        "Focus ST",
+        "Focus RS",
+        "Fiesta ST",
+        "Bronco"
+      ],
+      "Jeep": [
+        "Wrangler",
+        "Gladiator"
+      ],
+      "Mitsubishi": [
+        "Lancer Evo VIII",
+        "Lancer Evo IX",
+        "Lancer Evo X"
+      ],
+      "GMC": [
+        "Sierra 1500"
+      ]
+    };
+
+    const exampleBuilds = {
+      "Nissan|GT-R R35|Drag": {
+        title: "Nissan GT-R R35 — Streetable Drag Build",
+        subtitle: "900–1000 hp goal | E blend | still drive it to meets",
+        text: "This GT-R path focuses on repeatable 60–130 times and usable traction rather than just chasing dyno sheets. Turbo, fueling and TCU all work together with a tyre strategy that functions on real streets.",
+        parts: [
+          "Upgraded bolt-on turbos sized for fast spool and 900–1000 whp potential.",
+          "High-flow intakes, inlets and exhaust (downpipes plus cat-back) to support flow.",
+          "Upgraded fuel system sized for E50–E70 blends (pumps and injectors).",
+          "TCU tune for stronger shifts and correct clutch clamping for added torque.",
+          "Wide, sticky rear tyre setup with alignment tuned for high-speed stability."
+        ]
+      },
+      "Nissan|370Z|Drift": {
+        title: "Nissan 370Z — Beginner Drift Build",
+        subtitle: "Seat time first | angle and control before big power",
+        text: "Dailyable and driftable. Reliability and steering feel are prioritised so you can learn to drive the car at angle before chasing huge numbers.",
+        parts: [
+          "Hydraulic handbrake with proper lines and mounting hardware.",
+          "Diff solution (welded or quality limited-slip) for predictable lock on exit.",
+          "Mild angle kit with corrected geometry so you can still align it for the street.",
+          "Cooling upgrades for engine and power steering for hot drift days.",
+          "Consistent, affordable rear tyre choice so you can burn through sets often."
+        ]
+      },
+      "Subaru|WRX|Rally": {
+        title: "Subaru WRX — Rally / Rough-Road Build",
+        subtitle: "Suspension travel, tyres and protection before boost",
+        text: "Built for gravel roads and bad tarmac. Not slammed — comfortable, capable and less likely to hate you after every dirt run.",
+        parts: [
+          "Rally-capable suspension with more travel and appropriate spring rates.",
+          "Front and rear skid plates to protect oil pan, transmission and differentials.",
+          "All-terrain or gravel-focused tyres sized for sidewall and grip.",
+          "Short-throw shifter and bushings for better feel on rough surfaces.",
+          "Mild, conservative tune with careful boost and timing to protect ringlands."
+        ]
+      },
+      "Mazda|Miata ND|Track": {
+        title: "Mazda MX-5 Miata ND — Track Day Build",
+        subtitle: "Momentum car spec | grip and confidence first",
+        text: "The Miata does not need huge power to be fast. This path focuses on grip, feedback and consistency so you can drive it hard all day.",
+        parts: [
+          "Track-oriented brake pads with high-temperature fluid and stainless lines.",
+          "Quality coilovers tuned for track use rather than parking-lot stance.",
+          "Square wheel and semi-slick tyre setup for neutral handling.",
+          "Alignment with increased camber and a hint of front toe-out.",
+          "Mild intake and tune to clean up the powerband without overheating."
+        ]
+      },
+      "Jeep|Wrangler|Off-road": {
+        title: "Jeep Wrangler — Trail / Overland Build",
+        subtitle: "Practical lift, real traction, simple reliability",
+        text: "Avoids the classic mistake of going huge on lift and tyres without the right gearing and supporting mods. Built to wheel, camp and still drive home.",
+        parts: [
+          "2–3 inch quality lift kit with corrected geometry (control arms and track bar).",
+          "33–35 inch all-terrain or mud-terrain tyres depending on your terrain.",
+          "Re-gearing, if tyre size demands it, to restore drivability and fuel economy.",
+          "Steel bumpers with real recovery points front and rear.",
+          "Basic recovery kit and additional underbody skid protection."
+        ]
+      },
+      "Audi|R8 V10|Street": {
+        title: "Audi R8 V10 — Street / Daily Build",
+        subtitle: "Sound, stance and a safe bump in drama",
+        text: "Keeps the supercar feel while staying usable on normal streets and speed bumps. Built around sound, ride height and subtle power, not instant twin-turbo levels.",
+        parts: [
+          "Quality valved exhaust system for drama on demand, quiet when needed.",
+          "OEM-plus lowering solution (springs or coilovers) with aligned geometry.",
+          "Wheel and tyre fitment that clears without rubbing but fills the arches.",
+          "Mild ECU and TCU tune for sharper response and modest power.",
+          "Durable front lip and diffuser pieces that can survive daily use."
+        ]
+      },
+      "Toyota|Supra MK5 (A90)|Street": {
+        title: "Toyota GR Supra A90 — Street Build",
+        subtitle: "B58 torque plus daily comfort",
+        text: "The B58 is extremely tunable, but this setup keeps it fun and responsive without immediately needing a built motor. Ideal for daily use and weekend abuse.",
+        parts: [
+          "Stage 1 or 2 tune matched to a high-flow downpipe and upgraded cooling.",
+          "Intake and charge pipe upgrades to support reliable boost.",
+          "Lowering springs or coilovers tuned for street use rather than show stance.",
+          "Square wheel and tyre setup with quality ultra-high-performance tyres.",
+          "Upgraded brake pads and fluid so stopping power matches engine power."
+        ]
+      },
+      "Volkswagen|Golf R MK7|Street": {
+        title: "Volkswagen Golf R MK7 — Fast Daily Build",
+        subtitle: "Sleeper hatch spec | balanced everywhere",
+        text: "Ridiculously quick in the real world but still handles commutes, bad weather and passengers without drama.",
+        parts: [
+          "Stage 1 or 2 tune with supporting intake and downpipe for strong mid-range torque.",
+          "Upgraded intercooler to fight heat-soak on repeated pulls or track use.",
+          "Mild springs or coilovers plus an upgraded rear sway bar.",
+          "Square wheel and tyre setup tailored to your climate and use case.",
+          "Brake pad and fluid upgrade to keep things safe at higher speeds."
+        ]
+      },
+      "Ford|Mustang GT|Drag": {
+        title: "Ford Mustang GT — Street / Strip Drag Build",
+        subtitle: "Sticky 60-foot times without killing street manners",
+        text: "A weekend drag and highway-hit setup that you can still daily. Focused on traction, gearing and safe power delivery.",
+        parts: [
+          "Tune plus intake and exhaust for a solid naturally aspirated bump (or mild blower if budget allows).",
+          "Sticky drag radials on dedicated rear wheels with appropriate sidewall height.",
+          "Rear suspension upgrades to control squat and wheel-hop.",
+          "Driveshaft and half-shaft upgrades if your power level requires them.",
+          "Line-lock or similar solutions where legal for consistent launches."
+        ]
+      }
+    };
+
+    function initDatalists() {
+      const makeList = document.getElementById("makeList");
+      Object.keys(carData).sort().forEach(make => {
+        const opt = document.createElement("option");
+        opt.value = make;
+        makeList.appendChild(opt);
+      });
+    }
+
+    document.addEventListener("input", (e) => {
+      if (e.target.id === "makeInput") {
+        const make = e.target.value.trim();
+        const modelList = document.getElementById("modelList");
+        modelList.innerHTML = "";
+        if (carData[make]) {
+          carData[make].forEach(model => {
+            const opt = document.createElement("option");
+            opt.value = model;
+            modelList.appendChild(opt);
+          });
+        }
+      }
+    });
+
+    function handleBuild(event) {
+      event.preventDefault();
+
+      const make = document.getElementById("makeInput").value.trim();
+      const model = document.getElementById("modelInput").value.trim();
+      const year = document.getElementById("yearInput").value.trim();
+      const trim = document.getElementById("trimInput").value.trim();
+      const drivetrain = document.getElementById("drivetrainInput").value.trim();
+      const buildType = document.getElementById("buildTypeInput").value.trim();
+      const notes = document.getElementById("notesInput").value.trim();
+
+      const resultBox = document.getElementById("resultBox");
+      const titleEl = document.getElementById("resultTitle");
+      const subtitleEl = document.getElementById("resultSubtitle");
+      const textEl = document.getElementById("resultText");
+      const partsEl = document.getElementById("resultParts");
+      partsEl.innerHTML = "";
+
+      const key = make + "|" + model + "|" + buildType;
+      const preset = exampleBuilds[key];
+
+      if (preset) {
+        titleEl.textContent = preset.title;
+        subtitleEl.textContent = preset.subtitle;
+        textEl.textContent = preset.text;
+        preset.parts.forEach(p => {
+          const div = document.createElement("div");
+          div.className = "border border-slate-800 rounded-xl p-3 text-xs text-slate-200";
+          div.textContent = p;
+          partsEl.appendChild(div);
+        });
+      } else {
+        const comboTitle = (year ? year + " " : "") + (make || "Your Car") + (model ? " " + model : "");
+        titleEl.textContent = comboTitle + " — " + (buildType || "Custom") + " Concept";
+        subtitleEl.textContent = "No preset example for this combo yet, which usually means your idea is more unique.";
+        textEl.textContent =
+          "This is exactly where a custom EDÖ Auto Lab plan shines. Copy the combo you chose" +
+          (notes ? " (plus your notes)" : "") +
+          " into an email or DM and we will build a step-by-step mod path including priorities, rough pricing and reliability notes.";
+
+        const div = document.createElement("div");
+        div.className = "border border-slate-800 rounded-xl p-3 text-xs text-slate-200";
+        div.textContent =
+          "Tip: you can always start with tyres, brakes and suspension before power, then we fine-tune the details around your budget and local parts.";
+        partsEl.appendChild(div);
+      }
+
+      resultBox.classList.remove("hidden");
+      resultBox.scrollIntoView({ behavior: "smooth" });
+    }
+
+    document.addEventListener("DOMContentLoaded", initDatalists);
+  </script>
+</body>
+</html>

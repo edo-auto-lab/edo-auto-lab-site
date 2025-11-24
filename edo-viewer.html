@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>EDÖ Auto Lab | Visual Build Viewer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="Interactive visual builder prototype for EDÖ Auto Lab. Click on suspension, wheels, aero and power to see example options and how they change your build."
+  />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html { scroll-behavior: smooth; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100">
+  <header class="sticky top-0 z-30 backdrop-blur bg-slate-950/90 border-b border-slate-800">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="edo-home.html" class="flex items-center gap-2">
+        <div class="h-9 w-9 rounded-full border border-sky-400 bg-slate-900 flex items-center justify-center">
+          <span class="text-[0.65rem] font-semibold tracking-[0.18em] text-sky-300">EDÖ</span>
+        </div>
+        <div class="leading-tight">
+          <div class="font-semibold tracking-[0.16em] text-xs uppercase text-slate-100">EDÖ AUTO LAB</div>
+          <div class="text-[0.65rem] text-slate-400">Custom Build Blueprints</div>
+        </div>
+      </a>
+      <nav class="hidden md:flex items-center gap-6 text-sm">
+        <a href="edo-home.html" class="hover:text-sky-400 transition">Home</a>
+        <a href="edo-build.html" class="hover:text-sky-400 transition">Build</a>
+        <a href="edo-about.html" class="hover:text-sky-400 transition">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="max-w-6xl mx-auto px-4 pt-10 pb-14">
+      <h1 class="text-2xl sm:text-3xl font-semibold mb-2">Visual Build Viewer (Prototype)</h1>
+      <p class="text-sm text-slate-300 mb-6 max-w-2xl">
+        This is an early prototype of the Forza-style garage for real cars. Click different zones on the car to see example parts
+        and how they change power, handling, comfort, noise and cost.
+      </p>
+
+      <div id="carSummary" class="text-xs text-slate-400 mb-4"></div>
+
+      <div class="grid lg:grid-cols-[1.1fr,0.9fr] gap-6">
+        <div class="bg-slate-900/80 border border-slate-700 rounded-2xl p-5 relative">
+          <p class="text-xs text-slate-400 mb-3 uppercase tracking-[0.18em]">Click a Zone</p>
+          <div class="relative mx-auto max-w-md aspect-[16/9] bg-gradient-to-b from-slate-800 to-slate-900 rounded-2xl overflow-hidden">
+            <div class="absolute inset-x-6 bottom-6 h-10 bg-slate-700 rounded-[999px]"></div>
+            <div class="absolute inset-x-10 bottom-10 h-9 bg-slate-600 rounded-[999px]"></div>
+            <div class="absolute inset-x-16 bottom-16 h-7 bg-slate-500 rounded-[999px]"></div>
+            <div class="absolute left-10 bottom-4 h-10 w-10 rounded-full bg-slate-950 border-4 border-slate-500"></div>
+            <div class="absolute right-10 bottom-4 h-10 w-10 rounded-full bg-slate-950 border-4 border-slate-500"></div>
+
+            <button onclick="selectZone('suspension')" class="absolute inset-x-20 bottom-20 h-5 rounded-full border border-sky-400/60 bg-sky-500/10 text-[0.65rem] text-sky-200">
+              Suspension / Ride Height
+            </button>
+            <button onclick="selectZone('wheels')" class="absolute left-6 bottom-1 h-5 w-16 rounded-full border border-sky-400/60 bg-sky-500/10 text-[0.65rem] text-sky-200">
+              Wheels
+            </button>
+            <button onclick="selectZone('brakes')" class="absolute left-24 bottom-8 h-5 w-20 rounded-full border border-sky-400/60 bg-sky-500/10 text-[0.65rem] text-sky-200">
+              Brakes
+            </button>
+            <button onclick="selectZone('power')" class="absolute left-1/2 -translate-x-1/2 bottom-28 h-5 w-24 rounded-full border border-sky-400/60 bg-sky-500/10 text-[0.65rem] text-sky-200">
+              Power / Turbo
+            </button>
+            <button onclick="selectZone('aero')" class="absolute right-3 bottom-14 h-5 w-16 rounded-full border border-sky-400/60 bg-sky-500/10 text-[0.65rem] text-sky-200">
+              Aero
+            </button>
+            <button onclick="selectZone('exhaust')" class="absolute right-6 bottom-5 h-5 w-20 rounded-full border border-sky-400/60 bg-sky-500/10 text-[0.65rem] text-sky-200">
+              Exhaust
+            </button>
+          </div>
+          <p class="text-[11px] text-slate-500 mt-3">
+            In a full version this silhouette becomes a true 3D model of your exact platform. For now, this shows how the interaction will feel.
+          </p>
+        </div>
+
+        <div class="bg-slate-900/80 border border-slate-700 rounded-2xl p-5">
+          <p id="zoneTitle" class="text-sm font-semibold mb-1">Pick a Zone</p>
+          <p id="zoneSubtitle" class="text-xs text-slate-400 mb-4">
+            Click on the car to explore suspension, power, wheels, exhaust, brakes and aero options.
+          </p>
+          <div id="optionsList" class="space-y-3 text-xs text-slate-200"></div>
+          <p class="text-[11px] text-slate-500 mt-4">
+            Numbers are rough scores (out of 10) to show the trade-offs between power, handling, comfort, noise and cost.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-slate-800 bg-slate-950">
+    <div class="max-w-6xl mx-auto px-4 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+      <div class="flex items-center gap-2">
+        <span class="font-semibold text-slate-200">EDÖ Auto Lab</span>
+        <span class="hidden sm:inline-block text-slate-600">•</span>
+        <span>Visual Builder Prototype</span>
+      </div>
+      <div>Future: log in to save builds and export PDFs.</div>
+    </div>
+  </footer>
+
+  <script>
+    const examplePlatforms = {
+      "Audi|A3|Drag": {
+        suspension: [
+          { name: "Bilstein B16 Coilovers", change: "Drop ~25 mm, sharper response", handling: 8, comfort: 6, power: 0, noise: 0, cost: 7 },
+          { name: "KW V3 Coilovers", change: "Drop ~30 mm, more adjustability", handling: 9, comfort: 7, power: 0, noise: 0, cost: 8 }
+        ],
+        power: [
+          { name: "Stage 1 ECU Tune", change: "+40–60 hp, torque everywhere", handling: 0, comfort: 6, power: 7, noise: 1, cost: 3 },
+          { name: "Stage 2 + Downpipe", change: "+70–90 hp, needs supporting mods", handling: 0, comfort: 5, power: 9, noise: 3, cost: 5 }
+        ],
+        wheels: [
+          { name: "18\" Lightweight", change: "Less rotating mass, better response", handling: 7, comfort: 7, power: 0, noise: 0, cost: 5 }
+        ],
+        brakes: [
+          { name: "Performance Pads + Fluid", change: "Less fade, better bite", handling: 6, comfort: 7, power: 0, noise: 1, cost: 3 }
+        ],
+        exhaust: [
+          { name: "Sport Cat-Back", change: "More sound, small flow gain", handling: 0, comfort: 6, power: 2, noise: 6, cost: 4 }
+        ],
+        aero: [
+          { name: "OEM+ Lip & Diffuser", change: "Looks sharper, mild stability gain", handling: 3, comfort: 8, power: 0, noise: 0, cost: 3 }
+        ]
+      }
+    };
+
+    const genericOptions = {
+      suspension: [
+        { name: "Street Coilovers", change: "Lower ride height, firmer feel", handling: 8, comfort: 6, power: 0, noise: 0, cost: 6 },
+        { name: "Sport Springs", change: "Mild drop on stock dampers", handling: 6, comfort: 7, power: 0, noise: 0, cost: 3 }
+      ],
+      power: [
+        { name: "Stage 1 Tune", change: "More mid-range and top-end", handling: 0, comfort: 6, power: 7, noise: 2, cost: 3 }
+      ],
+      wheels: [
+        { name: "Lightweight Wheels", change: "Faster response, nicer feel", handling: 7, comfort: 7, power: 0, noise: 0, cost: 5 }
+      ],
+      brakes: [
+        { name: "Pads & Fluid", change: "Better repeated stops", handling: 6, comfort: 7, power: 0, noise: 1, cost: 3 }
+      ],
+      exhaust: [
+        { name: "Sport Cat-Back", change: "Deeper tone, slightly louder", handling: 0, comfort: 6, power: 2, noise: 5, cost: 4 }
+      ],
+      aero: [
+        { name: "OEM+ Aero Kit", change: "Cleaner airflow, nicer look", handling: 3, comfort: 8, power: 0, noise: 0, cost: 3 }
+      ]
+    };
+
+    let currentKey = "generic";
+
+    function initViewer() {
+      const params = new URLSearchParams(window.location.search);
+      const make = params.get("make") || "Your Car";
+      const model = params.get("model") || "";
+      const year = params.get("year") || "";
+      const build = params.get("build") || "Custom";
+
+      const summaryEl = document.getElementById("carSummary");
+      const label = (year ? year + " " : "") + make + (model ? " " + model : "");
+      summaryEl.textContent = label + " — " + build + " build concept";
+
+      const key = make + "|" + model + "|" + build;
+      if (examplePlatforms[key]) {
+        currentKey = key;
+      } else {
+        currentKey = "generic";
+      }
+    }
+
+    function selectZone(zone) {
+      const zoneTitle = document.getElementById("zoneTitle");
+      const zoneSubtitle = document.getElementById("zoneSubtitle");
+      const list = document.getElementById("optionsList");
+      list.innerHTML = "";
+
+      const platform = currentKey === "generic" ? genericOptions : examplePlatforms[currentKey];
+      const options = platform[zone] || [];
+
+      const zoneNames = {
+        suspension: "Suspension / Ride Height",
+        power: "Power / Turbo",
+        wheels: "Wheels and Tyres",
+        brakes: "Brakes",
+        exhaust: "Exhaust System",
+        aero: "Aero and Body"
+      };
+
+      zoneTitle.textContent = zoneNames[zone] || "Zone Details";
+      zoneSubtitle.textContent = options.length
+        ? "Example options for this area. Bars show rough scores from 1–10."
+        : "No example data yet for this zone. Future versions will pull real brand options here.";
+
+      options.forEach(opt => {
+        const wrapper = document.createElement("div");
+        wrapper.className = "border border-slate-800 rounded-xl p-3";
+
+        const title = document.createElement("div");
+        title.className = "font-semibold mb-1";
+        title.textContent = opt.name;
+        wrapper.appendChild(title);
+
+        const change = document.createElement("div");
+        change.className = "text-[11px] text-slate-400 mb-2";
+        change.textContent = opt.change || "";
+        wrapper.appendChild(change);
+
+        const stats = [
+          ["Power", opt.power ?? 0],
+          ["Handling", opt.handling ?? 0],
+          ["Comfort", opt.comfort ?? 0],
+          ["Noise", opt.noise ?? 0],
+          ["Cost", opt.cost ?? 0]
+        ];
+
+        stats.forEach(([label, value]) => {
+          const row = document.createElement("div");
+          row.className = "flex items-center gap-2 mb-1";
+          const lab = document.createElement("span");
+          lab.className = "w-16 text-[11px] text-slate-400";
+          lab.textContent = label;
+          const barWrap = document.createElement("div");
+          barWrap.className = "flex-1 h-1.5 rounded-full bg-slate-800 overflow-hidden";
+          const bar = document.createElement("div");
+          bar.className = "h-full bg-sky-400";
+          bar.style.width = Math.max(5, Math.min(100, value * 10)) + "%";
+          barWrap.appendChild(bar);
+          row.appendChild(lab);
+          row.appendChild(barWrap);
+          wrapper.appendChild(row);
+        });
+
+        list.appendChild(wrapper);
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", initViewer);
+  </script>
+</body>
+</html>
